@@ -14,6 +14,9 @@ func InitRouters() {
 	{
 		health := v1.Group("/health")
 		routers.HealthCheck(health)
+
+		user:= v1.Group("/users")
+		routers.User(user)
 	}
 	router.Run(":5000")
 }
