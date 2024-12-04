@@ -27,7 +27,7 @@ type ErrorResponse struct {
 	Response
 	Error string `json:"error"`
 }
-var errorResponse ErrorResponse
+
 func MakeValidationErrors(err error) *ValidationErrorResponse {
 	var ve validator.ValidationErrors
 	if err == nil {
