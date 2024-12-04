@@ -3,7 +3,9 @@ package helpers
 import (
 	"errors"
 	"net/http"
+
 	"github.com/gin-gonic/gin"
+	// "github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/validator/v10"
 )
 
@@ -16,9 +18,19 @@ type ValidationErrorResponse struct {
 	Errors map[string]string `json:"errors"`
 }
 
+type SuccessfulResponse struct {
+	Response
+	Data map[string]any `json:"data"`
+}
+
+type ErrorResponse struct {
+	Response
+	Error string `json:"error"`
+}
+var errorResponse ErrorResponse
 func MakeValidationErrors(err error) *ValidationErrorResponse {
 	var ve validator.ValidationErrors
-	if(err == nil){
+	if err == nil {
 		return &ValidationErrorResponse{}
 	}
 	if errors.As(err, &ve) {
@@ -36,14 +48,28 @@ func MakeValidationErrors(err error) *ValidationErrorResponse {
 	return &ValidationErrorResponse{}
 }
 
-
-func HandleValidationErrors(c *gin.Context, validator interface{}) interface{} {  
-	if err := c.ShouldBindJSON(&validator); err != nil {
-		validationErrors := MakeValidationErrors(err)  
-		if validationErrors != nil {  
-			c.JSON(http.StatusBadRequest, gin.H{"code": validationErrors.Code, "errors": validationErrors.Errors})  
-			return nil 
+func HandleValidationErrors(c *gin.Context, validator interface{}) interface{} {
+	c.Writer.Header().Set("Content-Type", "application/json")
+	if err := c.Bind(&validator); err != nil {
+		validationErrors := MakeValidationErrors(err)
+		if validationErrors.Errors != nil {
+			c.JSON(http.StatusBadRequest, validationErrors)
+			return nil
 		}
-	}  
-	return &validator  
-} 
+	}
+	return &validator
+}
+
+func HandleSuccessfulResponse(c *gin.Context, data map[string]any) {
+	var responseHandler SuccessfulResponse
+	responseHandler.Code = http.StatusOK
+	responseHandler.Data = data
+	c.JSON(http.StatusOK, responseHandler)
+}
+
+func HandleErrorResponse(c *gin.Context, code int, error string){
+	var responseHandler ErrorResponse
+	responseHandler.Code = code
+	responseHandler.Error = error
+	c.AbortWithStatusJSON(code, responseHandler)
+}

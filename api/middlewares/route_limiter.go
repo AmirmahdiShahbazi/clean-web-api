@@ -1,9 +1,11 @@
 package middlewares
 
 import (
+	"net/http"
+
+	"github.com/AmirmahdiShahbazi/clean-web-api/api/helpers"
 	"github.com/didip/tollbooth"
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
 
@@ -13,7 +15,7 @@ func RateLimiter() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		err := tollbooth.LimitByRequest(limiter, c.Writer, c.Request)
 		if err != nil {
-			c.AbortWithStatusJSON(http.StatusTooManyRequests, gin.H{"error": err.Error()})
+			helpers.HandleErrorResponse(c, http.StatusTooManyRequests, err.Error())
 		} else {
 			c.Next()
 		}

@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"net/http"
+	"github.com/AmirmahdiShahbazi/clean-web-api/api/helpers"
 	"github.com/gin-gonic/gin"
 )
 
@@ -13,5 +13,5 @@ func NewHealth() *HealthHandler {
 }
 
 func (h *HealthHandler) HealthCheck(c *gin.Context) {
-	c.JSON(http.StatusOK, "Working!!")
+	helpers.HandleSuccessfulResponse(c, map[string]any{"message": "Working!!!"})
 }
