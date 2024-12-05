@@ -1,0 +1,10 @@
+redis:
+  addr: "127.0.0.1:6379"
+  password: "password"
+  db: "0"
+postgres:
+  host: "127.0.0.1"
+  port: 5432
+  user: "amir"
+  password: "1234"
+  dbname: "car_sale_db"
