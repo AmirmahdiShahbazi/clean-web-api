@@ -8,3 +8,8 @@ postgres:
   user: "amir"
   password: "1234"
   dbname: "car_sale_db"
+logger:
+  filePath: ./logs/
+  encoding: json
+  level: debug
+  logger: zap

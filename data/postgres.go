@@ -3,9 +3,10 @@ package data
 import (
 	"database/sql"
 	"fmt"
-	"log"
-	_ "github.com/lib/pq"
+
 	"github.com/AmirmahdiShahbazi/clean-web-api/config"
+	"github.com/AmirmahdiShahbazi/clean-web-api/pkg/logger"
+	_ "github.com/lib/pq"
 )
 
 var PostgresClient *sql.DB
@@ -18,10 +19,10 @@ func ConnectToPostgres() {
 	var err error  
 	PostgresClient, err = sql.Open("postgres", psqlInfo)  
 	if err != nil {  
-		log.Fatal("Error opening Postgres connection: ", err)  
+		logger.NewLogger().Fatal(logger.Postgres, logger.Startup, err.Error(), nil)
 	}  
 	err = PostgresClient.Ping()  
 	if err != nil {  
-		log.Fatal("Error connecting to Postgres: ", err)  
+		logger.NewLogger().Fatal(logger.Postgres, logger.Startup, err.Error(), nil)
 	}  
 }  

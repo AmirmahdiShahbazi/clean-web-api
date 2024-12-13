@@ -2,10 +2,10 @@ package data
 
 import (
 	"context"
-	"log"
 	"time"
 
 	"github.com/AmirmahdiShahbazi/clean-web-api/config"
+	"github.com/AmirmahdiShahbazi/clean-web-api/pkg/logger"
 	"github.com/go-redis/redis/v8"
 )
 var RedisClient *redis.Client
@@ -21,7 +21,7 @@ func ConnectToRedis(){
 	defer cancel()
 	_, err := RedisClient.Ping(ctx).Result()
 	if err != nil {  
-		log.Fatal("Error connecting to Redis: \n", err)  
+		logger.NewLogger().Fatal(logger.Redis, logger.Startup, err.Error(), nil)
 	}  
 }
 

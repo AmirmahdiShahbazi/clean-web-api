@@ -9,6 +9,7 @@ import (
 type Config struct{
 	Redis RedisConfig `yaml:"redis"`
 	Postgres PostgresConfig `yaml:"postgres"`
+    Logger LoggerConfig `yaml:"logger"`
 }
 
 type RedisConfig struct{
@@ -23,7 +24,14 @@ type PostgresConfig struct {
     User     string `yaml:"user"`  
     Password string `yaml:"password"`  
     DBName   string `yaml:"dbname"`  
-}  	
+}  
+
+type LoggerConfig struct {
+    FilePath string `yaml:"filePath"`
+    Encoding string `yaml:"encoding"`
+    Level string `yaml:"level"`
+    Logger string `yaml:"logger"`
+}
 
 func GetConfigs() Config{  
     var configs Config  
@@ -44,4 +52,8 @@ func GetRedisConfigs() RedisConfig{
 
 func GetPostgresConfigs() PostgresConfig{
 	return GetConfigs().Postgres	
+}
+
+func GetLoggerConfigs() LoggerConfig{
+    return GetConfigs().Logger
 }
